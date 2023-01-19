@@ -41,6 +41,17 @@ class PingClient extends Node implements Client {
     public synchronized void sendCommand(Command command) {
         //TODO: fill this function as document
         //Check command validity; Send request to server; Set timer for possible resend due to network loss
+        if (command instanceof Ping) {
+            Ping p = (Ping) command;
+            ping = p;
+            pong = null;
+            send(new PingRequest(p), serverAddress);
+            set(new PingTimer(p), RETRY_MILLIS);
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
+
     }
 
     @Override
@@ -52,7 +63,10 @@ class PingClient extends Node implements Client {
     public synchronized Result getResult() throws InterruptedException {
         //TODO: fill this function as document
         //Check and wait for response from server
-        return null;
+        if (pong == null) {
+            wait();
+        }
+        return pong;
     }
 
     /* -------------------------------------------------------------------------
