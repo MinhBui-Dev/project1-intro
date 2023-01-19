@@ -30,6 +30,10 @@ public class PingApplication implements Application {
     public Pong execute(Command command) {
         //TODO: fill this function as document
         //Check command validity; Generate result
-        return null;
+        if (!(command instanceof Ping)) {
+            throw new IllegalArgumentException();
+        }
+        Ping p = (Ping) command;
+        return new Pong(p.value());
     }
 }
