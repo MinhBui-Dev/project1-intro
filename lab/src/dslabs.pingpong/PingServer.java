@@ -29,5 +29,7 @@ public class PingServer extends Node {
     private void handlePingRequest(PingRequest m, Address sender) {
         //TODO: fill this function as document
         //Local application execute request; Send response to client
+        Pong p = app.execute(m.ping());
+        send(new PongReply(p), sender);
     }
 }
